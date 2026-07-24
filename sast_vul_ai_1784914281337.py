@@ -20,7 +20,7 @@ def echo():
 
 
 if __name__ == "__main__":
-    # VULNERABLE: binding to 0.0.0.0 with debug=True exposes the dev server
-    # to the entire network and enables the Werkzeug debugger.
-    # semgrep: python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host
-    app.run(debug=True, host="0.0.0.0")
+    # FIXED: bind only to localhost. For external access, run behind a
+    # production WSGI server (e.g. Gunicorn/uWSGI) fronted by a reverse
+    # proxy, instead of exposing the Flask dev server directly.
+    app.run(debug=False, host="127.0.0.1")
